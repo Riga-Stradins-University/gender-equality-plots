@@ -65,7 +65,19 @@ function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, 
         bargroupgap: 0.1, // gap between within-group
         title: {text: `${plotTitle}`, font: { size: 18, family: "Arial, sans-serif" }},
         xaxis: {tickfont: {size: 14}},
-        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 14}, range: [0, 1700]}
+        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 14}, range: [0, 1700]},
+        legend: {
+            orientation: 'h',
+            x: 0.5,
+            y: 1.05,
+            xanchor: 'center',
+            yanchor: 'bottom',
+             font: {                 
+                    size: 14,          
+                    family: "Arial, sans-serif",
+                    color: "#000000"    
+                }
+        }
     };
       Plotly.react(containerId, [female_trace, male_trace], layout, {responsive: true});
     }

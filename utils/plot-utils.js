@@ -65,7 +65,7 @@ function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, 
         bargroupgap: 0.1, // gap between within-group
         title: {text: `${plotTitle}`, font: { size: 18, family: "Arial, sans-serif" }},
         xaxis: {tickfont: {size: 14}},
-        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 14}, range: [0, 1700]},
+        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 14}, range: [0, 2800]},
         legend: {
             orientation: 'h',
             x: 0.5,

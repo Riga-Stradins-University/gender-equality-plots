@@ -16,7 +16,7 @@
 
     <!-- Pane 5 -->
     <div id="pane5" class="chart-pane active" style="font-family: Arial, sans-serif;">
-      <label for="dataSelect5">Izvēlies datus, ko attēlot:</label>
+      <label for="dataSelect5">Select data to display:</label>
       <select id="dataSelect5"></select>
       <div id="plot-container5" style="width:100%;height:500px;"></div>
     </div>
@@ -32,23 +32,30 @@
 
             populateSelect("dataSelect5", relevantLabels, "managers");
 
-            makeBarPlot(
+            makeMultiLinePlot(
                     "plot-container5", 
                     payByGroup, 
-                    "managers", 
-                    {
-                        ...TEXTS[LANG]
-                    }
+                    ["managers"], 
+                    LABELS[LANG].groupNamesPossessive,
+                     {
+                        ...TEXTS[LANG],
+                        yAxisTitle: 'Average salary (EUR)',
+                        yRange: [0,2800],
+                        unitStr: "EUR",
+                      }
                   );
 
             document.getElementById("dataSelect5").addEventListener("change", e => {
-                makeBarPlot(
+                makeMultiLinePlot(
                   "plot-container5", 
                   payByGroup, 
-                  e.target.value, 
+                  [e.target.value], 
+                  LABELS[LANG].groupNamesPossessive,
                   {
-                      ...TEXTS[LANG]
-                  }
+                        ...TEXTS[LANG],
+                        hoverUnit: '', 
+                        yAxisTitle: ''
+                      }
                 );
             });
         });

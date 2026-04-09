@@ -32,27 +32,29 @@
 
             populateSelect("dataSelect1", relevantLabels, "all_applicants");
 
-            makeLinePlot(
+            makeMultiLinePlot(
                     "plot-container1", 
                     applicantsByGroup, 
-                    "home_applicants", 
+                    ["home_applicants"], 
                     LABELS[LANG].groupNamesPossessive, 
                     {
                       ...TEXTS[LANG],
                         hoverUnit: 'reflektanti', 
-                        yAxisTitle: 'Reflektantu %'
+                        yAxisTitle: 'Reflektantu %',
+                        plotTitle: "",
                     });
 
             document.getElementById("dataSelect1").addEventListener("change", e => {
-                makeLinePlot(
+                makeMultiLinePlot(
                         "plot-container1", 
                         applicantsByGroup, 
-                        e.target.value, 
+                        [e.target.value], 
                         LABELS[LANG].groupNamesPossessive, 
                         {
                            ...TEXTS[LANG],
                         hoverUnit: 'reflektanti', 
-                        yAxisTitle: 'Reflektantu %'
+                        yAxisTitle: 'Reflektantu %',
+                        plotTitle: "",
                         });
             });
         });

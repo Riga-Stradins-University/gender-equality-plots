@@ -32,23 +32,30 @@
 
             populateSelect("dataSelect5", relevantLabels, "managers");
 
-            makeBarPlot(
+            makeMultiLinePlot(
                     "plot-container5", 
                     payByGroup, 
-                    "managers", 
-                    {
-                        ...TEXTS[LANG]
-                    }
+                    ["managers"], 
+                    LABELS[LANG].groupNamesPossessive,
+                     {
+                        ...TEXTS[LANG],
+                        yAxisTitle: 'Vidējā alga (EUR)',
+                        yRange: [0,2800],
+                        unitStr: "EUR",
+                      }
                   );
 
             document.getElementById("dataSelect5").addEventListener("change", e => {
-                makeBarPlot(
+                makeMultiLinePlot(
                   "plot-container5", 
                   payByGroup, 
-                  e.target.value, 
+                  [e.target.value], 
+                  LABELS[LANG].groupNamesPossessive,
                   {
-                      ...TEXTS[LANG]
-                  }
+                        ...TEXTS[LANG],
+                        hoverUnit: '', 
+                        yAxisTitle: ''
+                      }
                 );
             });
         });

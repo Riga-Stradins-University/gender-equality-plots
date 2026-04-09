@@ -62,6 +62,9 @@ const TEXTS = {
   }
 };
 
+const PALETTE = ["#ff4b50", "#4b0023", "#c8c8dc", "#cd4b82", "#ffa08c"];
+const LINESTYLES = ["solid", "dash", "dot", "dashdot"];
+
 const applicantsByGroup = { 
     home_applicants: { x: [2022,2023,2024], y: [81,80,77], total: [3042,3092,3584]},
   };

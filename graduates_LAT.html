@@ -32,27 +32,29 @@
 
             populateSelect("dataSelect3", relevantLabels, "all_graduates");
             
-            makeLinePlot(
+            makeMultiLinePlot(
                       "plot-container3", 
                       graduatesByGroup, 
-                      "all_graduates", 
+                      ["all_graduates"], 
                       LABELS[LANG].groupNamesPossessive, 
                       {
                         ...TEXTS[LANG],
                         hoverUnit: 'absolventi', 
-                        yAxisTitle: 'Absolventu %'
+                        yAxisTitle: 'Absolventu %',
+                        plotTitle: "",
                       });
 
             document.getElementById("dataSelect3").addEventListener("change", e => {
-                makeLinePlot(
+                makeMultiLinePlot(
                       "plot-container3", 
                       graduatesByGroup, 
-                      e.target.value, 
+                      [e.target.value], 
                       LABELS[LANG].groupNamesPossessive, 
                       {
                         ...TEXTS[LANG],
                         hoverUnit: 'absolventi', 
-                        yAxisTitle: 'Absolventu %'  
+                        yAxisTitle: 'Absolventu %',
+                        plotTitle: "",  
                       });
             });
         });

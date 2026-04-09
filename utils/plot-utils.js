@@ -1,41 +1,128 @@
-function makeLinePlot(containerId, data, group, labelMapping, {
+function makeMultiLinePlot(containerId, data, groups, labelMapping, {
                                                 titlePrefix="Sieviešu %",
                                                 titleSuffix="vidū",
                                                 hoverWomen="sievietes",
                                                 hoverUnit="darbinieki", 
-                                                yAxisTitle="Darbinieku %"
+                                                yAxisTitle="Darbinieku %",
+                                                maleHoverName="vīrieši",
+                                                femaleHoverName="sievietes",
+                                                plotTitle="",
+                                                unitStr="%",
+                                                yRange = [0,100],
                                             }) {
-    let added_string = labelMapping[group] || "";
-    
-    const totals = data[group].total;
-    const meanTotal = totals.reduce((a, b) => a + b, 0) / totals.length;
-    const markerSizes = totals.map(n => 160 + (((n / meanTotal) - 1) * 400));
-    
-    const trace = {
-        x: data[group].x.map(String),
-        y: data[group].y,
-        mode: "lines+markers",
-        name: data[group].name,
-        marker: {
-            size: markerSizes,
-            sizemode: "area",
-            opacity: 0.5,
-            color: "#8e1719",
-            line: {width:1, color:"#cccccc"}
-        },
-        line: {width:4, color:"#8e1719"},
-        customdata: data[group].total,
-        hovertemplate: `%{y:.0f}% ${hoverWomen}<br>%{customdata} ${hoverUnit}<extra></extra>`
-    };
-    
+    const added_string = groups.map(g => labelMapping[g] || g).join(", ")
+    const jitterAmount = 0.1
+
+    const traces = [];
+    const allX = new Set(); // collect unique x vals across groups
+
+    const plotTitleStr = plotTitle===""
+                ? `${titlePrefix} ${added_string} ${titleSuffix}`
+                : plotTitle;
+
+    groups.forEach(group => {
+        const groupData = data[group];
+        if (!groupData) return;
+
+        groupData.x.forEach(x => allX.add(x)); // collect unique x
+
+        // detect series keys automatically
+        const seriesKeys = Object.keys(groupData)
+            .filter(k => !["x", "name", "total"].includes(k));
+
+        // case 1: single y series
+        if (seriesKeys.length === 1 && seriesKeys[0] === "y"){
+            const totals = groupData.total;
+            const meanTotal = totals.reduce((a, b) => a + b, 0) / totals.length;
+            const markerSizes = totals.map(n => 160 + (((n / meanTotal) - 1) * 400));
+
+            traces.push({
+                x: groupData.x.map(Number),
+                y: groupData.y,
+                mode: "lines+markers",
+                name: groupData.name || group,
+                marker: {
+                    size: markerSizes,
+                    sizemode: "area",
+                    opacity: 0.5,
+                    color: PALETTE[0],
+                    line: {width:1, color:"#cccccc"}
+                },
+                line: {width:4, color:PALETTE[0]},
+                customdata: totals,
+                hovertemplate: `%{y:.0f} ${unitStr} ${hoverWomen}<br>%{customdata} ${hoverUnit}<extra></extra>`
+                });
+        }
+
+        // case 2: multiple series with custom names
+        else {
+            const seriesLabelMap = {
+                    female: femaleHoverName,
+                    male: maleHoverName
+                };
+            seriesKeys.forEach((key, keyIndex) => {
+                const label = seriesLabelMap[key] || key; 
+                const jitteredX = groupData.x.map(x => Number(x) - 0.05 + (keyIndex * jitterAmount));
+                const traceClr = PALETTE[keyIndex % PALETTE.length];
+                const lineStyle = LINESTYLES[keyIndex % LINESTYLES.length];
+
+                traces.push({
+                    x: jitteredX,
+                    y: groupData[key],
+                    mode: "lines+markers",
+                    name: label,
+                    marker: {
+                        size: 20,
+                        opacity: 0.5,
+                        color: traceClr,
+                        line: {width:1, color:"#cccccc"}
+                    },
+                    line: {width:4, color:traceClr, dash: lineStyle},
+                    hovertemplate: `%{y:.0f} ${unitStr} ${label}<extra></extra>`
+                    });
+                });
+            }
+    });
+
+    // deal with the legend
+    if (traces.length > 1) {
+        legendLayout = {
+            orientation: 'h',          // horizontal
+            x: 0.5,                    // center horizontally
+            y: 1.05,                   // just below the title
+            xanchor: 'center',
+            yanchor: 'bottom',
+            font: {size: 14, family: "Arial, sans-serif", color: "#000"},
+            traceorder: 'normal',      
+        };
+    } else {
+        // hide legend if only one trace
+        legendLayout = {visible: false};
+    }
+
+    const xVals = Array.from(allX).sort();
     const layout = {
-        title: {text: `${titlePrefix} ${added_string} ${titleSuffix}`, font: {size:18, family:"Arial, sans-serif", color:"#000"}},
-        xaxis: {tickfont:{size:18, family:"Arial, sans-serif"}, type:'category'},
-        yaxis: {title:{text:yAxisTitle, font:{size:18, family:"Arial, sans-serif"}}, tickfont:{size:18, family:"Arial, sans-serif"}, range:[0,100]}
+        title: {
+            text: plotTitleStr, 
+            font: {size:18, family:"Arial, sans-serif", color:"#000"}
+        },
+        xaxis: {
+            tickfont:{size:18, family:"Arial, sans-serif"}, 
+            type:'linear',
+            tickvals: xVals.map(Number),
+            ticktext: xVals.map(String),
+        },
+        yaxis: {
+            title:{text:yAxisTitle, font:{size:18, family:"Arial, sans-serif"}}, 
+            tickfont:{size:18, family:"Arial, sans-serif"}, 
+            range:yRange
+        },
+        legend: legendLayout,
     };
     
-    Plotly.react(containerId, [trace], layout, {responsive:true});
+    Plotly.react(containerId, traces, layout, {responsive:true});
 }
+
 
 function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, plotTitle, ylabel}) {
       const female_trace = {
@@ -44,7 +131,7 @@ function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, 
         type: "bar",
         name: `${femaleHoverName}`,
         marker: {
-          color: "#8e1719"
+          color: PALETTE[0]
         },
         hovertemplate: `%{y:.0f} EUR`
       };
@@ -55,7 +142,7 @@ function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, 
         type: "bar",
         name: `${maleHoverName}`,
         marker: {
-          color: "#808080"
+          color: PALETTE[1]
         },
         hovertemplate: `%{y:.0f} EUR`
       };

@@ -31,27 +31,29 @@
 
             populateSelect("dataSelect4", relevantLabels, "all_staff");
 
-            makeLinePlot(
+            makeMultiLinePlot(
                     "plot-container4", 
                     employeesByGroup, 
-                    "all_staff", 
+                    ["all_staff"], 
                     LABELS[LANG].groupNamesPossessive, 
                     {
                         ...TEXTS[LANG],
                         hoverUnit: 'darbinieki', 
-                        yAxisTitle: 'Darbinieku %'
+                        yAxisTitle: 'Darbinieku %',
+                        plotTitle: "",
                     });
 
             document.getElementById("dataSelect4").addEventListener("change", e => {
-                makeLinePlot(
+                makeMultiLinePlot(
                         "plot-container4", 
                         employeesByGroup, 
-                        e.target.value, 
+                        [e.target.value], 
                         LABELS[LANG].groupNamesPossessive, 
                         {
                           ...TEXTS[LANG],
                           hoverUnit: 'darbinieki', 
-                          yAxisTitle: 'Darbinieku %'
+                          yAxisTitle: 'Darbinieku %',
+                          plotTitle: "",
                         });
             });
         });

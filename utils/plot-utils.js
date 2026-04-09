@@ -87,10 +87,10 @@ function makeMultiLinePlot(containerId, data, groups, labelMapping, {
     // deal with the legend
     if (traces.length > 1) {
         legendLayout = {
-            orientation: 'h',          // horizontal
-            x: 0.5,                    // center horizontally
-            y: 1.05,                   // just below the title
-            xanchor: 'center',
+            orientation: 'v',          // horizontal
+            x: 0.1,                    // center horizontally
+            y: 1,                   // just below the title
+            xanchor: 'left',
             yanchor: 'bottom',
             font: {size: 16, family: "Arial, sans-serif", color: "#000"},
             traceorder: 'normal',   

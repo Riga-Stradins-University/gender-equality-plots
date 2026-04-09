@@ -92,8 +92,9 @@ function makeMultiLinePlot(containerId, data, groups, labelMapping, {
             y: 1.05,                   // just below the title
             xanchor: 'center',
             yanchor: 'bottom',
-            font: {size: 14, family: "Arial, sans-serif", color: "#000"},
-            traceorder: 'normal',      
+            font: {size: 16, family: "Arial, sans-serif", color: "#000"},
+            traceorder: 'normal',   
+            itemwidth: 50,      
         };
     } else {
         // hide legend if only one trace
@@ -104,17 +105,17 @@ function makeMultiLinePlot(containerId, data, groups, labelMapping, {
     const layout = {
         title: {
             text: plotTitleStr, 
-            font: {size:18, family:"Arial, sans-serif", color:"#000"}
+            font: {size:16, family:"Arial, sans-serif", color:"#000"}
         },
         xaxis: {
-            tickfont:{size:18, family:"Arial, sans-serif"}, 
+            tickfont:{size:16, family:"Arial, sans-serif"}, 
             type:'linear',
             tickvals: xVals.map(Number),
             ticktext: xVals.map(String),
         },
         yaxis: {
-            title:{text:yAxisTitle, font:{size:18, family:"Arial, sans-serif"}}, 
-            tickfont:{size:18, family:"Arial, sans-serif"}, 
+            title:{text:yAxisTitle, font:{size:16, family:"Arial, sans-serif"}}, 
+            tickfont:{size:16, family:"Arial, sans-serif"}, 
             range:yRange
         },
         legend: legendLayout,
@@ -150,9 +151,9 @@ function makeBarPlot(containerId, data, group, {femaleHoverName, maleHoverName, 
       const layout = {
         barmode: 'group',  // this makes bars side-by-side
         bargroupgap: 0.1, // gap between within-group
-        title: {text: `${plotTitle}`, font: { size: 18, family: "Arial, sans-serif" }},
-        xaxis: {tickfont: {size: 14}},
-        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 14}, range: [0, 2800]},
+        title: {text: `${plotTitle}`, font: { size: 16, family: "Arial, sans-serif" }},
+        xaxis: {tickfont: {size: 16}},
+        yaxis: {title: {text: `${ylabel} (EUR)`, font: {size: 16}}, tickfont: {size: 16}, range: [0, 2800]},
         legend: {
             orientation: 'h',
             x: 0.5,

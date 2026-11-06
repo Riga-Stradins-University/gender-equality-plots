@@ -97,7 +97,7 @@ const graduatesByGroup = {
     };
 
 const studentsByGroup = {
-        all_students: { x: [2022,2023,2024], y: [75,77,75], total: [1144,1092,1137]}
+        all_students: { x: [2022,2023,2024,2025], y: [75,77,75,82], total: [1144,1092,1137,1315]}
     };
 
 const payByGroup = {
